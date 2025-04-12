@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>從 Excel 題庫生成 Google 表單教學</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --bg-light: #ffffff;
+      --bg-dark: #1a1a1a;
+      --text-light: #000000;
+      --text-dark: #f5f5f5;
+      --accent: #0057e7;
+    }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: all 0.3s ease;
+    }
+    header {
+      background: var(--accent);
+      color: white;
+      padding: 1.5rem 2rem;
+      text-align: center;
+    }
+    nav {
+      position: sticky;
+      top: 0;
+      background: white;
+      border-bottom: 1px solid #ccc;
+      padding: 0.5rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 999;
+    }
+    nav a {
+      text-decoration: none;
+      margin: 0 0.5rem;
+      color: var(--accent);
+      font-weight: bold;
+    }
+    .back-to-top {
+      position: fixed;
+      bottom: 1.2rem;
+      right: 1.2rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+    main {
+      max-width: 960px;
+      margin: auto;
+      padding: 2rem;
+    }
+    h2 {
+      color: var(--accent);
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 0.3rem;
+      margin-top: 2rem;
+    }
+    code, pre {
+      background: #f3f3f3;
+      padding: 0.75rem;
+      border-radius: 5px;
+      overflow-x: auto;
+      display: block;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 0.5rem;
+      text-align: left;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.9rem;
+      padding: 1rem;
+      color: #888;
+      border-top: 1px solid #ddd;
+    }
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      z-index: 1000;
+    }
+    body.dark-mode {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+    body.dark-mode header, body.dark-mode nav {
+      background-color: #222;
+      color: white;
+    }
+    body.dark-mode code, body.dark-mode pre {
+      background-color: #333;
+      color: #ddd;
+    }
+    body.dark-mode table, body.dark-mode th, body.dark-mode td {
+      border-color: #555;
+    }
+    body.dark-mode h2 {
+      color: #66b2ff;
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-adjust"></i></button>
+  <nav>
+    <div>
+      <a href="#">首頁</a>
+      <a href="#step1">準備資料</a>
+      <a href="#script">程式碼</a>
+      <a href="#resource">資源</a>
+    </div>
+  </nav>
+  <header>
+    <h1>📘 從 Excel 題庫生成 Google 表單教學</h1>
+    <p>支援多種題型，適合批次建立線上測驗表單</p>
+  </header>
+  <main>
+    <section id="goal">
+      <h2>🧩 教學目標</h2>
+      <ul>
+        <li>設計標準化題庫（Excel/CSV）</li>
+        <li>將資料轉換為通用 Google Apps Script</li>
+        <li>建立 Google 表單，支援大量題目匯入</li>
+      </ul>
+    </section>
+    <section id="step1">
+      <h2>📝 步驟一：準備 Excel 題庫</h2>
+      <table>
+        <tr><th>題號</th><th>主題</th><th>題型</th><th>題目</th><th>選項A~D</th><th>正解</th></tr>
+        <tr><td>1</td><td>行銷</td><td>單選</td><td>何者為數位行銷特性？</td><td>A~D</td><td>B</td></tr>
+      </table>
+    </section>
+    <section id="script">
+      <h2>⚙️ 步驟二：Apps Script 程式碼</h2>
+      <pre><code>function buildForm() {
+  const form = FormApp.create("自動產生測驗表單");
+  form.setIsQuiz(true);
+  const data = [
+    { type: "單選", title: "行銷是什麼？", choices: ["A", "B"], correct: ["B"] },
+    { type: "簡答", title: "說明 SEO" }
+  ];
+  data.forEach(q => {
+    if (q.type === "單選") {
+      let item = form.addMultipleChoiceItem();
+      item.setTitle(q.title);
+      item.setChoices(q.choices.map(c => item.createChoice(c, q.correct.includes(c))));
+    } else if (q.type === "簡答") {
+      form.addTextItem().setTitle(q.title);
+    }
+  });
+}</code></pre>
+    </section>
+    <section id="resource">
+      <h2>🔗 資源連結</h2>
+      <ul>
+        <li><a href="https://form-builder.app" target="_blank">CSV 表單匯入工具</a></li>
+        <li><a href="https://developers.google.com/apps-script" target="_blank">Apps Script 教學</a></li>
+      </ul>
+    </section>
+  </main>
+  <footer>
+    教學製作：吳老師 ｜ 教學用途歡迎分享與改編
+  </footer>
+  <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+    }
+  </script>
+</body>
+</html>
